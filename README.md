@@ -35,6 +35,7 @@ npm run build
 ```
 The build artifact is in build/. Copy or move it to the backend folder.
 ```
+cd todo_frontend
 mv build ../todo_backend/static
 ```
 In todo_backend/static, there should be a build/ in it.
@@ -55,4 +56,4 @@ npm start
 ```
 
 - Open your web browser and go to `http://localhost:3000`.
-- You can add ,update tasks, mark them as completed or delete them.
+- You can add, update tasks, mark them as completed or delete them.
