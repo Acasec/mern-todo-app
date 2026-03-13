@@ -1,33 +1,20 @@
 pipeline {
     agent any
 
-    environment {
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub')
-        IMAGE_NAME = 'u6530126/todo-app'
-    }
-
     stages {
-
         stage('Build Docker Image') {
             steps {
-                script {
-                    docker.build("${IMAGE_NAME}:latest", "./todo_backend")
+                dir('todo_backend') {
+                    sh 'docker build -t u6530126/todo-app:latest .'
                 }
             }
         }
 
-        stage('Login to Docker Hub') {
+        stage('Push to Docker Hub') {
             steps {
-                script {
-                    sh "echo ${DOCKERHUB_CREDENTIALS_PSW} | docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-stdin"
-                }
-            }
-        }
-
-        stage('Push Docker Image') {
-            steps {
-                script {
-                    sh "docker push ${IMAGE_NAME}:latest"
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                    sh 'echo $PASS | docker login -u $USER --password-stdin'
+                    sh 'docker push u6530126/todo-app:latest'
                 }
             }
         }
